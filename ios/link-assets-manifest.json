@@ -1,0 +1,13 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/Unna-Bold.ttf",
+      "sha1": "08014f366e6b58b0bd1ef4fb67e092da69b91756"
+    },
+    {
+      "path": "src/assets/fonts/Unna-Regular.ttf",
+      "sha1": "b6265dc796896b4aea7f194f08b9180352af6f03"
+    }
+  ]
+}
