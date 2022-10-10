@@ -8,9 +8,19 @@ import DefaultText from 'src/components/atoms/text/DefaultText';
 import callGoogleVisionAsync from 'src/utils/Helper';
 import LoadingIndicator from 'src/components/molecules/Loader/LoadingIndicator';
 
-type Props = {};
+type Props = {
+  setShowConvertedImage: (val: boolean) => void;
+  setCameraActive: (val: boolean) => void;
+  setTextImage: (val: any) => void;
+  setConvertedText: (val: any) => void;
+};
 
-const CameraPage = (props: Props) => {
+const CameraPage = ({
+  setShowConvertedImage,
+  setCameraActive,
+  setTextImage,
+  setConvertedText,
+}: Props) => {
   const [hasPermission, setHasPermission] = useState<boolean | any>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -29,10 +39,22 @@ const CameraPage = (props: Props) => {
     const photo = await camera.current.takePhoto({
       flash: 'on',
     });
-    console.log(photo);
+
     const base64image = await RNFS.readFile(photo.path, 'base64');
 
-    callGoogleVisionAsync(base64image, setLoading);
+    callGoogleVisionAsync(
+      base64image,
+      setLoading,
+      setShowConvertedImage,
+      setConvertedText,
+    ).then(async () => {
+      const path = RNFS.ExternalDirectoryPath + '/photo-L.jpg';
+
+      await RNFS.moveFile(photo.path, path);
+      setTextImage('file://' + path);
+
+      setCameraActive(false);
+    });
   };
 
   function renderCamera() {

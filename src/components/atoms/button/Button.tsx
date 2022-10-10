@@ -7,14 +7,16 @@ type Props = {
   onPress: () => void;
   children: React.ReactNode;
   disabled?: boolean;
+  styles?: any
+  width? : any
 };
 
-const Button = ({onPress, children = 'Submit', disabled}: Props) => {
+const Button = ({onPress, children = 'Submit', disabled, styles, width = '100%'}: Props) => {
   return (
     <TouchableOpacity
       onPress={onPress}
       disabled={disabled}
-      style={btnStyles.container}>
+      style={(btnStyles.container, styles, width)}>
       <DefaultText style={btnStyles.text}>{children}</DefaultText>
     </TouchableOpacity>
   );

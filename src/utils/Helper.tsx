@@ -26,6 +26,8 @@ function generateBody(image: any) {
 async function callGoogleVisionAsync(
   image: any,
   setLoading: (val: boolean) => void,
+  setShowConvertedImage: (val: boolean) => void,
+  setConvertedText: (val: string) => void,
 ) {
   setLoading(true);
   const body = generateBody(image); //pass in our image for the payload
@@ -40,10 +42,10 @@ async function callGoogleVisionAsync(
   });
   if (response) {
     const result = await response.json();
+    setConvertedText(result.responses[0].fullTextAnnotation.text);
     setLoading(false);
-    // console.log({
-    //   apiCallResult: result,
-    // });
+
+    setShowConvertedImage(true);
   }
 }
 export default callGoogleVisionAsync;

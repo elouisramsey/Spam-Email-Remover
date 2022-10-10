@@ -9,12 +9,16 @@ import ConvertedImage from './Result';
 
 type Props = {};
 const tabs = ['New Requests', 'View Requests'];
+
 const Home = (props: Props) => {
   const [tabIndex, setTabIndex] = useState(0);
   const [cameraActive, setCameraActive] = useState<boolean>(false);
   const [showConvertedImage, setShowConvertedImage] = useState<boolean>(false);
 
   const changeView = (index: number) => setTabIndex(index);
+
+  const [convertedText, setConvertedText] = useState<string>('')
+  const [textImage, setTextImage] = useState<string>('')
 
   return (
     <View style={homeStyles.container}>
@@ -44,8 +48,20 @@ const Home = (props: Props) => {
               <DefaultText>Kindly upload an image of the bill</DefaultText>
             </>
           )}
-          {cameraActive && <CameraPage />}
-          {showConvertedImage && <ConvertedImage />}
+          {cameraActive && (
+            <CameraPage
+              setShowConvertedImage={setShowConvertedImage}
+              setCameraActive={setCameraActive}
+              setTextImage={setTextImage}
+              setConvertedText={setConvertedText}
+            />
+          )}
+          {showConvertedImage && (
+            <ConvertedImage
+              convertedText={convertedText}
+              textImage={textImage}
+            />
+          )}
         </View>
       )}
       {tabIndex === 1 && <Index />}
