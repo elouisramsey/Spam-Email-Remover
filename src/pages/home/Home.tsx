@@ -5,14 +5,16 @@ import {homeStyles} from './HomeStyle';
 import CameraPage from './camera/Camera';
 import SegmentedControl from 'src/components/SegmentController/SegmentController';
 import Index from '../mails';
+import ConvertedImage from './Result';
 
 type Props = {};
-const tabs = ['New Requests', 'View Requests']
+const tabs = ['New Requests', 'View Requests'];
 const Home = (props: Props) => {
-    const [tabIndex, setTabIndex] = useState(0);
+  const [tabIndex, setTabIndex] = useState(0);
   const [cameraActive, setCameraActive] = useState<boolean>(false);
+  const [showConvertedImage, setShowConvertedImage] = useState<boolean>(false);
 
-    const changeView = (index: number) => setTabIndex(index);
+  const changeView = (index: number) => setTabIndex(index);
 
   return (
     <View style={homeStyles.container}>
@@ -22,13 +24,14 @@ const Home = (props: Props) => {
         tabs={tabs}
       />
       {tabIndex === 0 && (
-        <View style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '100%'
-        }}>
-          {!cameraActive && (
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '100%',
+          }}>
+          {!cameraActive && !showConvertedImage && (
             <>
               <TouchableOpacity
                 style={homeStyles.imgContainer}
@@ -42,6 +45,7 @@ const Home = (props: Props) => {
             </>
           )}
           {cameraActive && <CameraPage />}
+          {showConvertedImage && <ConvertedImage />}
         </View>
       )}
       {tabIndex === 1 && <Index />}
