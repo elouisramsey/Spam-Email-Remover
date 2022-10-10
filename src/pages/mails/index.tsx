@@ -19,7 +19,7 @@ type Props = {
 const Index = () => {
   const [userRequests, setUserRequests] = useState<any>([]);
 const {user} = useGeneralState()
-console.log(user)
+
   useEffect(() => {
     api
       .get(`/mail/${user._id}`)

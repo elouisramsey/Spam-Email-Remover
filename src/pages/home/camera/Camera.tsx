@@ -6,11 +6,14 @@ import RNFS from 'react-native-fs';
 import Button from 'src/components/atoms/button/Button';
 import DefaultText from 'src/components/atoms/text/DefaultText';
 import callGoogleVisionAsync from 'src/utils/Helper';
+import LoadingIndicator from 'src/components/molecules/Loader/LoadingIndicator';
 
 type Props = {};
 
 const CameraPage = (props: Props) => {
   const [hasPermission, setHasPermission] = useState<boolean | any>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
   const devices = useCameraDevices();
   const device: any = devices.back;
   const camera = useRef(null) as any;
@@ -26,10 +29,10 @@ const CameraPage = (props: Props) => {
     const photo = await camera.current.takePhoto({
       flash: 'on',
     });
-
+    console.log(photo);
     const base64image = await RNFS.readFile(photo.path, 'base64');
 
-    callGoogleVisionAsync(base64image);
+    callGoogleVisionAsync(base64image, setLoading);
   };
 
   function renderCamera() {
@@ -41,7 +44,7 @@ const CameraPage = (props: Props) => {
       );
     } else {
       return (
-        <View style={{flex: 1, backgroundColor: 'red'}}>
+        <View style={CameraStyles.container}>
           {device != null && hasPermission && (
             <>
               <Camera
@@ -54,14 +57,8 @@ const CameraPage = (props: Props) => {
               />
               <TouchableOpacity
                 onPress={onPressButton}
-                style={{
-                  height: 80,
-                  width: 80,
-                  backgroundColor: 'green',
-                  borderWidth: 1,
-                  zIndex: 10,
-                }}>
-                <Text>Click me</Text>
+                style={CameraStyles.btn}>
+                <DefaultText color="black">Snap</DefaultText>
               </TouchableOpacity>
             </>
           )}
@@ -70,7 +67,27 @@ const CameraPage = (props: Props) => {
     }
   }
 
-  return <View style={{flex: 1, width: '100%'}}>{renderCamera()}</View>;
+  return (
+    <View style={{flex: 1, width: '100%'}}>
+      {renderCamera()}
+
+      <LoadingIndicator loading={loading} />
+    </View>
+  );
 };
 
 export default CameraPage;
+
+const CameraStyles = StyleSheet.create({
+  container: {flex: 1, alignItems: 'center', justifyContent: 'flex-end'},
+  btn: {
+    height: 80,
+    width: 80,
+    backgroundColor: 'white',
+    borderWidth: 1,
+    zIndex: 10,
+    borderRadius: 80 / 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

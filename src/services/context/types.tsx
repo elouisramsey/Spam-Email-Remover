@@ -1,3 +1,3 @@
 export type userContextType = {
-    user: any
-}
+  user: any;
+};
