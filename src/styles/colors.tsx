@@ -3,6 +3,7 @@ export const PRIMARY = '#c6b477';
 export const SECONDARY = '#313335';
 export const TERTIARY = '#808080';
 export const GRAY = '#2B3543';
+export const WHITE = '#FFF';
 
 // ACTIONS
 export const SUCCESS = '#3adb76';

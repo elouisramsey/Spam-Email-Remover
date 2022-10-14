@@ -20,6 +20,8 @@ const Home = (props: Props) => {
   const [convertedText, setConvertedText] = useState<string>('')
   const [textImage, setTextImage] = useState<string>('')
 
+  const [rawPhoto, setRawPhoto] = useState<any>();
+
   return (
     <View style={homeStyles.container}>
       <SegmentedControl
@@ -33,13 +35,15 @@ const Home = (props: Props) => {
             flex: 1,
             alignItems: 'center',
             justifyContent: 'center',
-            width: '100%',
-          }}>
+            width: '100%'
+          }}
+        >
           {!cameraActive && !showConvertedImage && (
             <>
               <TouchableOpacity
                 style={homeStyles.imgContainer}
-                onPress={() => setCameraActive(true)}>
+                onPress={() => setCameraActive(true)}
+              >
                 <Image
                   source={require('@assets/images/upload.png')}
                   style={homeStyles.image}
@@ -54,12 +58,14 @@ const Home = (props: Props) => {
               setCameraActive={setCameraActive}
               setTextImage={setTextImage}
               setConvertedText={setConvertedText}
+              setRawPhoto={setRawPhoto}
             />
           )}
           {showConvertedImage && (
             <ConvertedImage
               convertedText={convertedText}
               textImage={textImage}
+              rawPhoto={rawPhoto}
             />
           )}
         </View>

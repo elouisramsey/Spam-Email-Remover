@@ -13,6 +13,7 @@ type Props = {
   setCameraActive: (val: boolean) => void;
   setTextImage: (val: any) => void;
   setConvertedText: (val: any) => void;
+  setRawPhoto: (val: any) => void;
 };
 
 const CameraPage = ({
@@ -20,6 +21,7 @@ const CameraPage = ({
   setCameraActive,
   setTextImage,
   setConvertedText,
+  setRawPhoto
 }: Props) => {
   const [hasPermission, setHasPermission] = useState<boolean | any>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -37,16 +39,16 @@ const CameraPage = ({
 
   const onPressButton = async () => {
     const photo = await camera.current.takePhoto({
-      flash: 'on',
+      flash: 'on'
     });
-
+    setRawPhoto(photo);
     const base64image = await RNFS.readFile(photo.path, 'base64');
 
     callGoogleVisionAsync(
       base64image,
       setLoading,
       setShowConvertedImage,
-      setConvertedText,
+      setConvertedText
     ).then(async () => {
       const path = RNFS.ExternalDirectoryPath + '/photo-L.jpg';
 
@@ -61,7 +63,7 @@ const CameraPage = ({
     if (device == null) {
       return (
         <View>
-          <Text style={{color: '#fff'}}>Loading</Text>
+          <Text style={{ color: '#fff' }}>Loading</Text>
         </View>
       );
     } else {
@@ -79,7 +81,8 @@ const CameraPage = ({
               />
               <TouchableOpacity
                 onPress={onPressButton}
-                style={CameraStyles.btn}>
+                style={CameraStyles.btn}
+              >
                 <DefaultText color="black">Snap</DefaultText>
               </TouchableOpacity>
             </>
@@ -90,7 +93,7 @@ const CameraPage = ({
   }
 
   return (
-    <View style={{flex: 1, width: '100%'}}>
+    <View style={{ flex: 1, width: '100%' }}>
       {renderCamera()}
 
       <LoadingIndicator loading={loading} />

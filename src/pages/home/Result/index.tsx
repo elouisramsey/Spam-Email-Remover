@@ -1,71 +1,90 @@
-import {View, Image, ScrollView} from 'react-native';
-import React from 'react';
-import {Colors, Spacing} from 'src/styles';
+import { View, Image, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { Colors, Spacing } from 'src/styles';
 import DefaultText from 'src/components/atoms/text/DefaultText';
 import Button from 'src/components/atoms/button/Button';
+import { resultStyles } from './styles';
+import {
+  FONT_SIZE_18
+} from 'src/styles/typography';
+import api from 'src/utils/api';
+import { useGeneralState } from 'src/services/context/general';
 
 type Props = {
   convertedText: string;
   textImage: any;
+  rawPhoto: any
 };
 
-const ConvertedImage = ({convertedText, textImage}: Props) => {
-const submit = () => {}
+const ConvertedImage = ({ convertedText, textImage, rawPhoto }: Props) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const { user } = useGeneralState();
+
+  const SubmitUnsubscribeRequest = () => {
+    setLoading(true);
+    api
+      .post('/mail', {
+        image: rawPhoto,
+        imageText: convertedText,
+        id: user._id
+      })
+      .then((res: any) => {
+        console.log(res.data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setLoading(false);
+        console.log(err);
+      });
+  };
 
   return (
-    <View
-      style={{
-        backgroundColor: 'white',
-        height: '100%',
-        width: '100%',
-      }}>
-      <View
-        style={{
-          height: '50%',
-          width: '100%',
-          borderBottomColor: Colors.PRIMARY,
-          borderBottomWidth: 1,
-        }}>
+    <View style={resultStyles.container}>
+      <View style={resultStyles.imgContainer}>
         <Image
           source={{
-            uri: textImage,
+            uri: textImage + '?' + new Date()
           }}
-          style={{
-            flex: 1,
-            width: undefined,
-            height: undefined,
-          }}
+          style={resultStyles.img}
           resizeMode="contain"
         />
       </View>
       <ScrollView
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
-        style={{
+        contentContainerStyle={{
           padding: Spacing.SCALE_16,
-        }}>
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
         <DefaultText
           style={{
-            textAlign: 'center',
-          }}>
+            textAlign: 'center'
+          }}
+        >
           {convertedText}
         </DefaultText>
-        <View
-          style={{
-            flexDirection: 'column',
-            width: '100%',
-            justifyContent: 'space-between',
-            backgroundColor: 'pink'
-          }}>
-          <Button onPress={submit} width="45%">
-            Submit
+        <View style={resultStyles.btnContainer}>
+          <Button
+            onPress={SubmitUnsubscribeRequest}
+            styles={{
+              backgroundColor: Colors.PRIMARY,
+              width: '45%'
+            }}
+            fontSize={FONT_SIZE_18}
+          >
+            Submit request
           </Button>
           <Button
             onPress={() => {}}
             styles={{
-              backgroundColor: Colors.GRAY,
+              backgroundColor: Colors.SECONDARY,
+              width: '45%'
             }}
-            width="45%">
+            color={Colors.WHITE}
+            fontSize={FONT_SIZE_18}
+          >
             Cancel
           </Button>
         </View>

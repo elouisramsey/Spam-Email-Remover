@@ -12,7 +12,7 @@ module.exports = {
           '.tsx',
           '.ios.js',
           '.android.js',
-          '.svg',
+          '.svg'
         ],
         alias: {
           '*': '.',
@@ -23,10 +23,18 @@ module.exports = {
           '@styles': ['./src/styles'],
           '@navigation': ['./src/navigations'],
           '@atoms': ['./src/components/atoms'],
-          '@utils': ['./src/utils'],
-        },
-      },
+          '@utils': ['./src/utils']
+        }
+      }
     ],
     'react-native-reanimated/plugin',
-  ],
+    [
+      'module:react-native-dotenv',
+      {
+        envName: 'APP_ENV',
+        moduleName: '@env',
+        path: '.env'
+      }
+    ]
+  ]
 };

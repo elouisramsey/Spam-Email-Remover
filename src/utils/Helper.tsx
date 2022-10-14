@@ -1,5 +1,6 @@
-// never try this for a prod app, use env
-const API_KEY = 'AIzaSyDXdGEI05QKEk4Q1mHilZ8wRCpMcklC-l4';
+import { REACT_APP_GOOGLE_API_KEY } from '@env';
+
+const API_KEY = REACT_APP_GOOGLE_API_KEY;
 
 //this endpoint will tell Google to use the Vision API. We are passing in our key as well.
 const API_URL = `https://vision.googleapis.com/v1/images:annotate?key=${API_KEY}`;
@@ -9,16 +10,16 @@ function generateBody(image: any) {
     requests: [
       {
         image: {
-          content: image,
+          content: image
         },
         features: [
           {
-            type: 'TEXT_DETECTION', //we will use this API for text detection purposes.
-            maxResults: 1,
-          },
-        ],
-      },
-    ],
+            type: 'TEXT_DETECTION',
+            maxResults: 1
+          }
+        ]
+      }
+    ]
   };
   return body;
 }
@@ -27,18 +28,18 @@ async function callGoogleVisionAsync(
   image: any,
   setLoading: (val: boolean) => void,
   setShowConvertedImage: (val: boolean) => void,
-  setConvertedText: (val: string) => void,
+  setConvertedText: (val: string) => void
 ) {
   setLoading(true);
-  const body = generateBody(image); //pass in our image for the payload
+  const body = generateBody(image); 
 
   const response = await fetch(API_URL, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify(body)
   });
   if (response) {
     const result = await response.json();
@@ -50,4 +51,3 @@ async function callGoogleVisionAsync(
 }
 export default callGoogleVisionAsync;
 
-// 23f@@^^hnAl90"4rt
