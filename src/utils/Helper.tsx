@@ -1,6 +1,7 @@
-import { REACT_APP_GOOGLE_API_KEY } from '@env';
+import { REACT_APP_GOOGLE_API_KEY, REACT_APP_CLOUD_NAME } from '@env';
 
 const API_KEY = REACT_APP_GOOGLE_API_KEY;
+export const CLOUDINARY_NAME = REACT_APP_CLOUD_NAME;
 
 //this endpoint will tell Google to use the Vision API. We are passing in our key as well.
 const API_URL = `https://vision.googleapis.com/v1/images:annotate?key=${API_KEY}`;

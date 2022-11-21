@@ -10,7 +10,7 @@ const defaults = {
 };
 
 const api = axios.create({
-  baseURL: 'http://localhost:7000/api/v1',
+  baseURL: 'http://10.0.2.2:7000/api/v1'
 });
 
 export default api;

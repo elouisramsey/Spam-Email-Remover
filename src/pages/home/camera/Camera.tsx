@@ -1,7 +1,8 @@
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {useCameraDevices, Camera} from 'react-native-vision-camera';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { useCameraDevices, Camera } from 'react-native-vision-camera';
 import RNFS from 'react-native-fs';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 import Button from 'src/components/atoms/button/Button';
 import DefaultText from 'src/components/atoms/text/DefaultText';
@@ -37,26 +38,48 @@ const CameraPage = ({
     })();
   }, []);
 
+  let options = {
+    storageOptions: {
+      skipBackup: true,
+      path: 'images'
+    },
+    includeBase64: true
+  };
+
   const onPressButton = async () => {
-    const photo = await camera.current.takePhoto({
-      flash: 'on'
-    });
-    setRawPhoto(photo);
-    const base64image = await RNFS.readFile(photo.path, 'base64');
+    launchCamera(
+      {
+        includeBase64: true,
+        mediaType: 'photo',
+        saveToPhotos: true,
+        cameraType: 'back'
+      },
+      response => {
+        console.log('Response = ', response);
+        setCameraActive(false)
+      }
+    );
 
-    callGoogleVisionAsync(
-      base64image,
-      setLoading,
-      setShowConvertedImage,
-      setConvertedText
-    ).then(async () => {
-      const path = RNFS.ExternalDirectoryPath + '/photo-L.jpg';
+    // const photo = await camera.current.takePhoto({
+    //   flash: 'on'
+    // });
 
-      await RNFS.moveFile(photo.path, path);
-      setTextImage('file://' + path);
+    // setRawPhoto(photo);
+    // const base64image = await RNFS.readFile(photo.path, 'base64');
 
-      setCameraActive(false);
-    });
+    // callGoogleVisionAsync(
+    //   base64image,
+    //   setLoading,
+    //   setShowConvertedImage,
+    //   setConvertedText
+    // ).then(async () => {
+    //   const path = RNFS.DocumentDirectoryPath + '/photo-L.jpg';
+
+    //   await RNFS.writeFile(photo.path, path);
+    //   setTextImage('file://' + path);
+
+    //   setCameraActive(false);
+    // });
   };
 
   function renderCamera() {
@@ -104,7 +127,7 @@ const CameraPage = ({
 export default CameraPage;
 
 const CameraStyles = StyleSheet.create({
-  container: {flex: 1, alignItems: 'center', justifyContent: 'flex-end'},
+  container: { flex: 1, alignItems: 'center', justifyContent: 'flex-end' },
   btn: {
     height: 80,
     width: 80,
@@ -113,6 +136,6 @@ const CameraStyles = StyleSheet.create({
     zIndex: 10,
     borderRadius: 80 / 2,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'
+  }
 });
